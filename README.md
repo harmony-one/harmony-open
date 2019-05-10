@@ -11,7 +11,7 @@ We launched our [$1Million technical bounties](https://medium.com/harmony-one/an
 We will be regularly posting technical bounties/issues on [Gitcoin](http://harmony.one/gitcoin). Instructions on how to complete the bounties will be included in the repository. The bounties will be awarded to the hunter who finishes within the deadline with the best solution.
 
 
-Once the project has been completed, a pull request may be initiated in the repo specified in the project description. Pull requests will be reviewed by one of the core developers of Harmony. We also encourage you to join our *#tech-bounty* channel in [Discord](http://harmony.one/discord) for faster communication and engagement with our core-development team.
+Once the project has been completed, a pull request may be initiated in the repo specified in the project description. Pull requests will be reviewed by one of the core developers of Harmony. We also request you join our *#dev-bounty* channel in [Discord](http://harmony.one/discord) for faster communication and engagement with our core-development team.
 
 **Rewards (Harmony Bounty Tokens - HARBTY)**
 
