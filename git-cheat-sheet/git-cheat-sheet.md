@@ -74,5 +74,7 @@ It’s a collection of best practices FYI.
     2. The “head repository” and “compare” are the source
        (that is, your fork & branch).
 
+    ![Pull Request Screenshot](image1.png)
+
 3. Proceed to open a pull request.
 
