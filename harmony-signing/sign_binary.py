@@ -24,30 +24,32 @@ def sign_harmony_file(inputFile, sigFile, keyId = harmonySigningKeyId):
     region_name = region_from_key_id(keyId)
     kms_client = boto3.client('kms', region_name)
 
-    data = open(inputFile, "rb").read()
-    digest = hashlib.sha256(data).digest()
+    signature = ''
+    with open(inputFile, "rb") as f:
+        data = f.read()
+        digest = hashlib.sha256(data).digest()
 
-    print("File Name   : ", inputFile)
-    print("Digest      : ", binascii.hexlify(digest))
-    print("Sign Key ID : ", harmonySigningKeyId)
-    print("Algorithm   : ", signingAlgorithm)
-    print("Signature   : ", sigFile)
+        print("File Name   : ", inputFile)
+        print("Digest      : ", binascii.hexlify(digest))
+        print("Sign Key ID : ", harmonySigningKeyId)
+        print("Algorithm   : ", signingAlgorithm)
+        print("Signature   : ", sigFile)
 
-    response = kms_client.sign(
-        KeyId = keyId,
-        Message = digest,
-        MessageType = 'DIGEST',
-        GrantTokens=[
-            'string',
-        ],
-        SigningAlgorithm=signingAlgorithm
-    )
-    #print(response)
+        response = kms_client.sign(
+            KeyId = keyId,
+            Message = digest,
+            MessageType = 'DIGEST',
+            SigningAlgorithm=signingAlgorithm
+        )
 
-    signature = response['Signature']
-    open(sigFile,"wb").write(signature)
+        signature = response['Signature']
 
-    return True
+    if signature != '':
+        with open(sigFile,"wb") as of:
+            of.write(signature)
 
 if __name__ == '__main__':
-    sign_harmony_file(sys.argv[1], sys.argv[2], harmonySigningKeyId)
+    if len(sys.argv) != 4:
+        print("Usage: python3 sign_harmony_file [aws_key_id] [input_file] [output_signature]")
+    else:
+        sign_harmony_file(sys.argv[2], sys.argv[3], sys.argv[1])
