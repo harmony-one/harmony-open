@@ -38,6 +38,30 @@ source venv/bin/activate
 python sign_binary.py harmony harmony.sig
 ```
 
+  Note that you can provide an AWS profile with an optional argument. For example:
+```bash
+python sign_binary.py --aws_profile_name=harmony-kms harmony harmony.sig
+```
+  
+### Usage
+```
+usage: sign_binary.py [-h] [--sig_alg SIG_ALG] [--aws_key_id AWS_KEY_ID] [--aws_profile_name AWS_PROFILE_NAME] input_filepath output_sig_filepath
+
+Sign binaries for harmony
+
+positional arguments:
+  input_filepath        The binary file to be signed.
+  output_sig_filepath   The output of the signature
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --sig_alg SIG_ALG     The signing algorithm
+  --aws_key_id AWS_KEY_ID
+                        The ARN signing key id.
+  --aws_profile_name AWS_PROFILE_NAME
+                        The AWS profile with credentials
+```
+
 ## Verify the signature on client side
 
   Both harmony binary and signature file can be downloaded publically on harmony S3 buckets. Once downloaded, the authenticity of harmony binary should be verified.
