@@ -18,6 +18,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -182,7 +183,7 @@ func setupAwsService()  *kms.KMS {
 	envSettingString, err := readline(envJSON, 1 * time.Second);
 	var awsConfig AwsConfiguration
 
-	if (err == nil) {
+	if (err == nil && envSettingString != "") {
 		err := json.Unmarshal([]byte(envSettingString), &awsConfig)
 		if err != nil {
 			fmt.Println(envSettingString, " is not a valid JSON string for setting aws configuration.")
@@ -194,10 +195,15 @@ func setupAwsService()  *kms.KMS {
 		SharedConfigState: session.SharedConfigEnable,
 	}))
 
-	svc := kms.New(sess, &aws.Config{
+	var svc *kms.KMS
+	if (awsConfig.Region != "" && awsConfig.Region != "" && awsConfig.Region != "") {
+		svc = kms.New(sess, &aws.Config{
 		Region: aws.String(awsConfig.Region),
-		Credentials: credentials.NewStaticCredentials(awsConfig.AccessKey, awsConfig.SecretKey, ""),
-	})
+		Credentials: credentials.NewStaticCredentials(awsConfig.AccessKey, awsConfig.SecretKey, "")})
+	}  else {
+		fmt.Println("No explicit aws key is specified, using aws-region & secret key from aws shared credentials file.")
+		svc = kms.New(sess, &aws.Config{})
+	}
 
 	return svc
 }
@@ -365,7 +371,7 @@ func main() {
 	rotateCmdKeyId  := rotateCommand.String("new_key_id", "", "The aws CMK key Id used for encrypting new bls key file. (Required)")
 
 	convertCmdBlsOld := convertCommand.String("legacy_blskey_file", "", "The legacy encrypted file of bls serialized private key by passphrase. (Required)")
-	convertCmdBlsNew := convertCommand.String("cms_blskey_file", "", "The new aws CMK encrypted bls private key file. (Required)")
+	convertCmdBlsNew := convertCommand.String("cms_blskey_file", "", "The new aws CMK encrypted bls private key file. ")
 	convertCmdBlsPass:= convertCommand.String("blspass", "", "The passphrase to decrypt the encrypted bls file. i.e. file:<file_name>, pass:<string>, env:<key>")
 	convertCmdKeyId  := convertCommand.String("key_id", "", "The aws CMK key Id used for encrypting bls key file. (Required)")
 
@@ -429,12 +435,23 @@ func main() {
 
 	if convertCommand.Parsed() {
 		// Required Flags
-		if *convertCmdBlsOld == "" || *convertCmdBlsNew == "" || *convertCmdKeyId == "" {
+		if *convertCmdBlsOld == "" || *convertCmdKeyId == "" {
 			convertCommand.PrintDefaults()
 			os.Exit(1)
 		}
 
-		convertOldBlsKeyFile(*convertCmdBlsOld, *convertCmdBlsPass, *convertCmdBlsNew, *convertCmdKeyId)
+		var outputFile string
+
+		// use the same file name as the old bls key, but change the suffix to .bls from .key
+		if *convertCmdBlsNew == "" {
+			outputFile = filepath.Base(*convertCmdBlsOld)
+			outputFile = strings.TrimSuffix(outputFile, ".key")
+			outputFile += ".bls"
+			fmt.Println(outputFile)
+		} else {
+			outputFile = *convertCmdBlsNew
+		}
+		convertOldBlsKeyFile(*convertCmdBlsOld, *convertCmdBlsPass, outputFile, *convertCmdKeyId)
 	}
 
 	if pubkeyCommand.Parsed() {
