@@ -1,12 +1,10 @@
 package main
 
 import (
-	"bufio"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/md5"
 	"encoding/hex"
-	"encoding/json"
 	"flag"
 	"github.com/harmony-one/harmony/crypto/bls"
 	ffi_bls "github.com/harmony-one/bls/ffi/go/bls"
@@ -18,46 +16,10 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"path/filepath"
 	"strconv"
 	"strings"
-	"time"
-
 	"fmt"
 )
-
-type AwsConfiguration struct {
-	AccessKey string `json:"aws_access_key_id"`
-	SecretKey string `json:"aws_secret_access_key"`
-	Region    string `json:"aws_region"`
-}
-
-func readline(prompt string, timeout time.Duration) (string, error) {
-	s := make(chan string)
-	e := make(chan error)
-
-	go func() {
-		fmt.Print(prompt)
-		reader := bufio.NewReader(os.Stdin)
-		line, err := reader.ReadString('\n')
-		if err != nil {
-			e <- err
-		} else {
-			s <- line
-		}
-		close(s)
-		close(e)
-	}()
-
-	select {
-	case line := <-s:
-		return line, nil
-	case err := <-e:
-		return "", err
-	case <-time.After(timeout):
-		return "", errors.New("Timeout")
-	}
-}
 
 func writeToFile(filename string, data string) error {
 	file, err := os.Create(filename)
@@ -178,28 +140,16 @@ func loadBlsKeyWithPassPhrase(fileName, passphrase string) (*ffi_bls.SecretKey, 
 	return priKey, nil
 }
 
-func setupAwsService()  *kms.KMS {
-	var envJSON string
-	envSettingString, err := readline(envJSON, 1 * time.Second);
-	var awsConfig AwsConfiguration
-
-	if (err == nil && envSettingString != "") {
-		err := json.Unmarshal([]byte(envSettingString), &awsConfig)
-		if err != nil {
-			fmt.Println(envSettingString, " is not a valid JSON string for setting aws configuration.")
-			panic(err)
-		}
-	}
-
+func setupAwsService(awsAccessKeyId, awsSecretAccessKey, awsRegion string)  *kms.KMS {
 	sess := session.Must(session.NewSessionWithOptions(session.Options{
 		SharedConfigState: session.SharedConfigEnable,
 	}))
 
 	var svc *kms.KMS
-	if (awsConfig.Region != "" && awsConfig.Region != "" && awsConfig.Region != "") {
+	if (awsAccessKeyId != "" && awsSecretAccessKey != "" && awsRegion != "") {
 		svc = kms.New(sess, &aws.Config{
-		Region: aws.String(awsConfig.Region),
-		Credentials: credentials.NewStaticCredentials(awsConfig.AccessKey, awsConfig.SecretKey, "")})
+		Region: aws.String(awsRegion),
+		Credentials: credentials.NewStaticCredentials(awsAccessKeyId, awsSecretAccessKey, "")})
 	}  else {
 		fmt.Println("No explicit aws key is specified, using aws-region & secret key from aws shared credentials file.")
 		svc = kms.New(sess, &aws.Config{})
@@ -211,17 +161,20 @@ func setupAwsService()  *kms.KMS {
 func printHeader()  {
 	fmt.Println("\nBLS key utility for the Harmony blockchain")
 	fmt.Println("Usage:")
-	fmt.Println(os.Args[0], "[command]\n")
+	fmt.Println(os.Args[0], "[command][options]\n")
 	fmt.Println("Available Commands:")
 	fmt.Println("generate\tgenerate a new BLS key and encrypt it with aws CMK key")
+	fmt.Println("        \trequired options: key-id\n")
 	fmt.Println("convert\t\tconvert the legacy BLS key file to new aws CMK encrypted BLS key file")
+	fmt.Println("        \trequired options: key-id blskey-file blspass\n")
 	fmt.Println("rotate\t\tdecrypt and re-encrypt BLS key using new aws CMK key ID")
-	fmt.Println("pubkey\t\tdisplay the public key of a BLS key file\n")
+	fmt.Println("        \trequired options: key-id blskey-file new-blskey-file\n")
+	fmt.Println("pubkey\t\tdisplay the public key of a BLS key file")
+	fmt.Println("        \trequired options: blskey-file\n")
 	fmt.Println("command arguments:")
 }
 
-func generateBlsKey(keyId string) {
-	svc := setupAwsService()
+func generateBlsKey(svc *kms.KMS, keyId string) {
 
 	privateKey := bls.RandPrivateKey()
 	publicKey := privateKey.GetPublicKey()
@@ -252,9 +205,7 @@ func generateBlsKey(keyId string) {
 	}
 }
 
-func rotateBlsKey(blsKeyFileOld, blsKeyFileNew, keyId string) {
-	svc := setupAwsService()
-
+func rotateBlsKey(svc *kms.KMS, blsKeyFileOld, blsKeyFileNew, keyId string) {
 	encryptedPrivateKeyBytes, err := ioutil.ReadFile(blsKeyFileOld)
 	if err != nil {
 		fmt.Println("Got error %s reading file %s ", err, blsKeyFileOld)
@@ -283,9 +234,7 @@ func rotateBlsKey(blsKeyFileOld, blsKeyFileNew, keyId string) {
 	}
 }
 
-func displayPublicKey(blsKeyFile string) {
-	svc := setupAwsService()
-
+func displayPublicKey(svc *kms.KMS, blsKeyFile string) {
 	encryptedPrivateKeyBytes, err := ioutil.ReadFile(blsKeyFile)
 	if err != nil {
 		fmt.Println("Got error %s reading file %s ", err, blsKeyFile)
@@ -315,9 +264,7 @@ func displayPublicKey(blsKeyFile string) {
 	fmt.Println(hex.EncodeToString(priKey.GetPublicKey().Serialize()))
 }
 
-func convertOldBlsKeyFile(legacyBlsKeyFile, blsPass, newBlsKeyFile, keyId string) {
-	svc := setupAwsService()
-
+func convertOldBlsKeyFile(svc *kms.KMS, legacyBlsKeyFile, blsPass, newBlsKeyFile, keyId string) {
 	var privateKey *ffi_bls.SecretKey
 	if legacyBlsKeyFile != "" {
 		if blsPass == "" {
@@ -352,115 +299,43 @@ func convertOldBlsKeyFile(legacyBlsKeyFile, blsPass, newBlsKeyFile, keyId string
 	if err != nil {
 		fmt.Println("Error creating the new bls file : %s ", err)
 		os.Exit(1)
-	} else {
+ 	} else {
 		fmt.Println("Successfully created a new bls key file ", newBlsKeyFile, " using key id ", keyId)
 	}
 }
 
-
 func main() {
-	generateCommand  := flag.NewFlagSet("generate", flag.ExitOnError)
-	rotateCommand  := flag.NewFlagSet("rotate", flag.ExitOnError)
-	convertCommand := flag.NewFlagSet("convert", flag.ExitOnError)
-	pubkeyCommand  := flag.NewFlagSet("pubkey", flag.ExitOnError)
-
-	generateCmdKeyId  := generateCommand.String("enc_key_id", "", "The aws CMK key Id used for encrypting new bls key file. (Required)")
-
-	rotateCmdBlsOld := rotateCommand.String("old_blskey_file", "", "The old aws CMK encrypted bls private key file. (Required)")
-	rotateCmdBlsNew := rotateCommand.String("new_blskey_file", "", "The new aws CMK encrypted bls private key file. (Required)")
-	rotateCmdKeyId  := rotateCommand.String("new_key_id", "", "The aws CMK key Id used for encrypting new bls key file. (Required)")
-
-	convertCmdBlsOld := convertCommand.String("legacy_blskey_file", "", "The legacy encrypted file of bls serialized private key by passphrase. (Required)")
-	convertCmdBlsNew := convertCommand.String("cms_blskey_file", "", "The new aws CMK encrypted bls private key file. ")
-	convertCmdBlsPass:= convertCommand.String("blspass", "", "The passphrase to decrypt the encrypted bls file. i.e. file:<file_name>, pass:<string>, env:<key>")
-	convertCmdKeyId  := convertCommand.String("key_id", "", "The aws CMK key Id used for encrypting bls key file. (Required)")
-
-	pubkeyCmdBlsKey  := pubkeyCommand.String("blskey_file", "", "The aws CMK encrypted bls private key file . (Required)")
+	awsAccessKeyId      := flag.String("aws-access-key-id", "", "The aws access key Id.")
+	awsSecretAccessKey  := flag.String("aws-secret-access-key", "", "The aws secret access key.")
+	awsRegion           := flag.String("aws-region", "", "The aws region.")
+	keyId               := flag.String("key-id", "", "The aws CMK key Id used for encrypting bls key file.")
+	new_blskey_file     := flag.String("new-blskey-file", "", "The generated bls key file after key rotation.")
+	blskey_file     	:= flag.String("blskey-file", "", "The input bls key file.")
+	blspass             := flag.String("blspass", "", "The passphrase to decrypt the bls key file. i.e. file:<file_name>, pass:<string>, env:<key>")
 
 	if len(os.Args) < 2 {
 		printHeader()
-		fmt.Println("generate:")
-		generateCommand.PrintDefaults()
-		fmt.Println("convert:")
-		convertCommand.PrintDefaults()
-		fmt.Println("roate:")
-		rotateCommand.PrintDefaults()
-		fmt.Println("pubkey:")
-		pubkeyCommand.PrintDefaults()
+		flag.PrintDefaults()
 		os.Exit(1)
 	}
 
-	//flag.Parse()
-	switch os.Args[1] {
-	case "generate":
-		generateCommand.Parse(os.Args[2:])
-	case "rotate":
-		rotateCommand.Parse(os.Args[2:])
-	case "convert":
-		convertCommand.Parse(os.Args[2:])
-	case "pubkey":
-		pubkeyCommand.Parse(os.Args[2:])
-	default:
-		printHeader()
-		fmt.Println("generate")
-		generateCommand.PrintDefaults()
-		fmt.Println("convert")
-		convertCommand.PrintDefaults()
-		fmt.Println("roate")
-		rotateCommand.PrintDefaults()
-		fmt.Println("pubkey")
-		pubkeyCommand.PrintDefaults()
-		os.Exit(1)
-	}
+	cmd := os.Args[1]
+	os.Args = os.Args[1:]
+	flag.Parse()
 
-	if generateCommand.Parsed() {
-		// Required Flags
-		if *generateCmdKeyId == "" {
-			generateCommand.PrintDefaults()
+	svc := setupAwsService(*awsAccessKeyId, *awsSecretAccessKey, *awsRegion)
+
+	switch cmd {
+		case "generate":
+			generateBlsKey(svc, *keyId)
+		case "rotate":
+			rotateBlsKey(svc, *blskey_file, *new_blskey_file, *keyId)
+		case "convert":
+			convertOldBlsKeyFile(svc, *blskey_file, *blspass, *new_blskey_file, *keyId)
+		case "pubkey":
+			displayPublicKey(svc, *blskey_file)
+		default:
+			printHeader()
 			os.Exit(1)
-		}
-
-		generateBlsKey(*generateCmdKeyId)
-	}
-
-	if rotateCommand.Parsed() {
-		// Required Flags
-		if *rotateCmdBlsOld == "" || *rotateCmdBlsNew == "" || *rotateCmdBlsNew == "" {
-			rotateCommand.PrintDefaults()
-			os.Exit(1)
-		}
-
-		rotateBlsKey(*rotateCmdBlsOld, *rotateCmdBlsNew, *rotateCmdKeyId)
-	}
-
-	if convertCommand.Parsed() {
-		// Required Flags
-		if *convertCmdBlsOld == "" || *convertCmdKeyId == "" {
-			convertCommand.PrintDefaults()
-			os.Exit(1)
-		}
-
-		var outputFile string
-
-		// use the same file name as the old bls key, but change the suffix to .bls from .key
-		if *convertCmdBlsNew == "" {
-			outputFile = filepath.Base(*convertCmdBlsOld)
-			outputFile = strings.TrimSuffix(outputFile, ".key")
-			outputFile += ".bls"
-			fmt.Println(outputFile)
-		} else {
-			outputFile = *convertCmdBlsNew
-		}
-		convertOldBlsKeyFile(*convertCmdBlsOld, *convertCmdBlsPass, outputFile, *convertCmdKeyId)
-	}
-
-	if pubkeyCommand.Parsed() {
-		// Required Flags
-		if *pubkeyCmdBlsKey == "" {
-			pubkeyCommand.PrintDefaults()
-			os.Exit(1)
-		}
-
-		displayPublicKey(*pubkeyCmdBlsKey)
 	}
 }
