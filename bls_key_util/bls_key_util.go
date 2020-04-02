@@ -175,6 +175,10 @@ func printHeader()  {
 }
 
 func generateBlsKey(svc *kms.KMS, keyId string) {
+	if (keyId == "") {
+		fmt.Println("parameter key-id is required ")
+		os.Exit(1)
+	}
 
 	privateKey := bls.RandPrivateKey()
 	publicKey := privateKey.GetPublicKey()
@@ -206,6 +210,11 @@ func generateBlsKey(svc *kms.KMS, keyId string) {
 }
 
 func rotateBlsKey(svc *kms.KMS, blsKeyFileOld, blsKeyFileNew, keyId string) {
+	if (keyId == "" || blsKeyFileOld == "" || blsKeyFileNew == "") {
+		fmt.Println("parameter key-id, blskey-file, new-blskey-file are required ")
+		os.Exit(1)
+	}
+
 	encryptedPrivateKeyBytes, err := ioutil.ReadFile(blsKeyFileOld)
 	if err != nil {
 		fmt.Println("Got error %s reading file %s ", err, blsKeyFileOld)
@@ -235,6 +244,11 @@ func rotateBlsKey(svc *kms.KMS, blsKeyFileOld, blsKeyFileNew, keyId string) {
 }
 
 func displayPublicKey(svc *kms.KMS, blsKeyFile string) {
+	if (blsKeyFile == "" ) {
+		fmt.Println("parameter blskey-file is required ")
+		os.Exit(1)
+	}
+
 	encryptedPrivateKeyBytes, err := ioutil.ReadFile(blsKeyFile)
 	if err != nil {
 		fmt.Println("Got error %s reading file %s ", err, blsKeyFile)
@@ -265,6 +279,11 @@ func displayPublicKey(svc *kms.KMS, blsKeyFile string) {
 }
 
 func convertOldBlsKeyFile(svc *kms.KMS, legacyBlsKeyFile, blsPass, newBlsKeyFile, keyId string) {
+	if (keyId == "" || legacyBlsKeyFile == "" || blsPass == "") {
+		fmt.Println("parameter key-id, blskey-file, blspass are required ")
+		os.Exit(1)
+	}
+
 	var privateKey *ffi_bls.SecretKey
 	if legacyBlsKeyFile != "" {
 		if blsPass == "" {
