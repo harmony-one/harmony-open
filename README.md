@@ -2,20 +2,33 @@
 
 Open-participation projects for Harmony.  **Propose, rally, build, *reap!***
 
-We are preparing the first batch of area initiatives and work items to be undertaken.  Please watch the trackers for [Issues](https://github.com/harmony-one/harmony/issues) and [Projects](https://github.com/harmony-one/harmony/projects/9)!
 
+**Welcome to Harmony Stake Heist**
 
-**Harmony Technical Bounty Program**
+Stake Heist is Harmony's adversarial hacking competition that will take place before open staking launch. We are collaborating with Gitcoin and will launch the competition on 6th of April. We currently expect competition to go for 2 weeks, but also likely to have some extensions. 
 
-We launched our [$1Million technical bounties](https://medium.com/harmony-one/announcing-1million-technical-bounties-c5ea23de023d) program a few weeks ago. We’ve received tremendous support from developers and teams across the world. We want to use this Campaign to help build a strong technical foundation and ecosystem for Harmony developers, users and partners. 
-We will be regularly posting technical bounties/issues on [Gitcoin](http://harmony.one/gitcoin). Instructions on how to complete the bounties will be included in the repository. The bounties will be awarded to the hunter who finishes within the deadline with the best solution.
+**What are the bounties?**
 
+There are two categories of bounties in Stake Heist:
+1. [Exploit] (https://github.com/harmony-one/harmony/labels/exploit): These bounties help us identify vulnerabilities in our design and code. These are open ended and usually include attack vectors and exploits.
+  - Since these bounties are open ended and difficult to pre-define, they will have a tiered prize mechanism.
 
-Once the project has been completed, a pull request may be initiated in the repo specified in the project description. Pull requests will be reviewed by one of the core developers of Harmony. We also request you join our *#dev-bounty* channel in [Discord](http://harmony.one/discord) for faster communication and engagement with our core-development team.
+2. [Project] (https://github.com/harmony-one/harmony/labels/project): These bounties are projects that are useful for validators and delegators in staking. The requirements for these bounties are more clear (compared to exploits).
 
-**Rewards (Harmony Bounty Tokens - HARBTY)**
+**Prizes and judging criteria**
 
-We have created an ERC-20 token with the ticker ‘HARBTY’ specifically for the Harmony bounty program. Bounty hunters that earn HARBTY token will be able to convert them 1:1 to Harmony tokens on network launch. The price of the Harmony token pre-launch is valued at ~$.0068/token. However, once the Harmony token is available on public exchanges, the price will be determined by the market.
+**Submission and reset process**
+
+For exploits:
+
+      1. an issue is opened with valid submission criteria and evidence
+      2. Bounty submission to be a valid by Harmony team: each submission to tagged as valid/invalid within 6 hours of submission
+      3. If network is affected, network should be relaunched / reverted within 3 hours
+      4. Share post-attack announcement: Attack performed and details (github link), ETA on network relaunch (if applicable), CTA for participants
+      5. Relaunch / upgrade coordination with participants
+      6. Recurring or similar bounties will not be rewarded, hackers should assume valid exploits that are submitted as out-of-scope until further notice (unless the exploit is performed in a distinctive way)
+
+**Terms**
 
 **Last but not least**
 
