@@ -10,10 +10,10 @@ Stake Heist is Harmony's adversarial hacking competition that will take place be
 **What are the bounties?**
 
 There are two categories of bounties in Stake Heist:
-1. [Exploit] (https://github.com/harmony-one/harmony/labels/exploit): These bounties help us identify vulnerabilities in our design and code. These are open ended and usually include attack vectors and exploits.
+1. [Exploit](https://github.com/harmony-one/harmony/labels/exploit): These bounties help us identify vulnerabilities in our design and code. These are open ended and usually include attack vectors and exploits.
   - Since these bounties are open ended and difficult to pre-define, they will have a tiered prize mechanism.
 
-2. [Project] (https://github.com/harmony-one/harmony/labels/project): These bounties are projects that are useful for validators and delegators in staking. The requirements for these bounties are more clear (compared to exploits).
+2. [Project](https://github.com/harmony-one/harmony/labels/project): These bounties are projects that are useful for validators and delegators in staking. The requirements for these bounties are more clear (compared to exploits).
 
 **Prizes and judging criteria**
 
