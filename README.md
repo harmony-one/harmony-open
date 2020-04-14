@@ -15,9 +15,11 @@ There are two categories of bounties in Stake Heist:
 
 There are three tiers of prize ranges. Each bounty submission could be eligible for any (or all) of the prize tiers. Please check the original bounty posting to see which tiers are applicable.
 
-**Submission process and guidelines**
+<img width="494" alt="Screen Shot 2020-04-03 at 3 23 06 PM" src="https://user-images.githubusercontent.com/45907268/79284917-dc8ebb80-7e70-11ea-84d1-5d4b7193527c.png">
 
-Exploits:
+# **Submission process and guidelines**
+
+**Exploits:**
 
 1. Give us a heads up by clicking ‘start work’ button on the Gitcoin posting for the bounty (Recommended at least 2 prior to submission, especially for exploits that could affect network stability) 
 2. Submit the evidence of your work by opening a new issue on Harmony main repo, using the ‘stake heist submission’ template. Make sure to click ‘submit work’ and link your work on Gitcoin.
@@ -26,7 +28,7 @@ Exploits:
 5. You will receive the final decision of winners within 2 weeks after the competition ends
 
 
-Projects:
+**Projects:**
 
 1. Submit a scope approval request by clicking ‘start work’ button on the Gitcoin posting for the bounty. Please include in your request the following: 
     - Short description of deliverable
