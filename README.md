@@ -17,6 +17,13 @@ There are three tiers of prize ranges. Each bounty submission could be eligible 
 
 <img width="494" alt="Screen Shot 2020-04-03 at 3 23 06 PM" src="https://user-images.githubusercontent.com/45907268/79284917-dc8ebb80-7e70-11ea-84d1-5d4b7193527c.png">
 
+Judging criteria will take into consideration:
+- Criticality of the exploits (e.g., users/cases impacted, size of impact)
+- How easy/complex it is to recreate
+- Level of research and analysis done by the reporter
+
+Please note that the prizes will be paid in native ONE tokens and claiming the prizes will be subject to completing KYC.
+
 # **Submission process and guidelines**
 
 **Exploits:**
@@ -42,8 +49,12 @@ There are three tiers of prize ranges. Each bounty submission could be eligible 
 
 **Terms**
 
+* There will be no duplicate rewards for similar submissions, it's in participant's responsibility to track submissions up to date in order to avoid duplicate work
+* All activities related to a bounty can be found under the original posting
+* Participants need to complete KYC to claim prizes
+* Final prizes will be decided within 2 weeks of competition end OR 2 weeks after submission (in case this is a late submission) by the Harmony team
 
 
-**Last but not least**
+**Join the conversation**
 
-Be sure to *STAR* our [open source project](https://github.com/harmony-one/harmony) before you start working on the bounty!  **Happy Hacking!**
+Join our [Telegram group for Open Staking testnet](https://t.me/PangaeaVolunteers) 
