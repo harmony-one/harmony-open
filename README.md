@@ -4,14 +4,14 @@
 
 Stake Heist is Harmony's adversarial hacking competition that will take place before open staking launch. We are collaborating with Gitcoin. We currently expect competition to go for 2 weeks, but also likely to have some extensions. 
 
-**What are the bounties?**
+### **What are the bounties?**
 
 There are two categories of bounties in Stake Heist:
 1. [Exploit](https://github.com/harmony-one/harmony/labels/exploit): These bounties help us identify vulnerabilities in our design and code. These are open ended and usually include attack vectors and exploits.
 
 2. [Project](https://github.com/harmony-one/harmony/labels/project): These bounties are projects that are useful for validators and delegators in staking. The requirements for these bounties are more clear (compared to exploits).
 
-**Prizes and judging criteria**
+### **Prizes and judging criteria**
 
 There are three tiers of prize ranges. Each bounty submission could be eligible for any (or all) of the prize tiers. Please check the original bounty posting to see which tiers are applicable.
 
@@ -22,11 +22,11 @@ Judging criteria will take into consideration:
 - How easy/complex it is to recreate
 - Level of research and analysis done by the reporter
 
-Please note that the prizes will be paid in native ONE tokens and claiming the prizes will be subject to completing KYC.
+Please note that the prizes will be paid in native ONE tokens and USD value of prizes could change based on the rate.
 
 # **Submission process and guidelines**
 
-**Exploits:**
+#### Exploits:
 
 1. Give us a heads up by clicking ‘start work’ button on the Gitcoin posting for the bounty (Recommended at least 2 prior to submission, especially for exploits that could affect network stability) 
 2. Submit the evidence of your work by opening a new issue on Harmony main repo, using the ‘stake heist submission’ template. Make sure to click ‘submit work’ and link your work on Gitcoin.
@@ -35,7 +35,7 @@ Please note that the prizes will be paid in native ONE tokens and claiming the p
 5. You will receive the final decision of winners within 2 weeks after the competition ends
 
 
-**Projects:**
+#### Projects:
 
 1. Submit a scope approval request by clicking ‘start work’ button on the Gitcoin posting for the bounty. Please include in your request the following: 
     - Short description of deliverable
