@@ -11,6 +11,8 @@ There are two categories of bounties in Stake Heist:
 
 2. [Project](https://github.com/harmony-one/harmony/labels/project): These bounties are projects that are useful for validators and delegators in staking. The requirements for these bounties are more clear (compared to exploits).
 
+Claim your test ONE tokens by filling [this form](https://pangaeabyharmony.typeform.com/to/iwvc0a) to start hacking!
+
 ### **Prizes and judging criteria**
 
 There are three tiers of prize ranges. Each bounty submission could be eligible for any (or all) of the prize tiers. Please check the original bounty posting to see which tiers are applicable.
