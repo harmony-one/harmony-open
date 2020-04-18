@@ -51,11 +51,16 @@ Please note that the prizes will be paid in native ONE tokens and USD value of p
 
 **Terms**
 
-* There will be no duplicate rewards for similar submissions, it's in participant's responsibility to track submissions up to date in order to avoid duplicate work
+* There will be no duplicate rewards for similar submissions, it’s in participant’s responsibility to track submissions up to date in order to avoid duplicate work
+* Exploits that are related to issues identified and reported before the competition start date will not be eligible for submission
+* Please provide detailed reports and reproducible steps. Incorrect report formats will not be eligible for complete review
+* Do not attack other Harmony networks other than OSTN
 * All activities related to a bounty can be found under the original posting
-* Participants need to complete KYC to claim prizes
+* Participants need to complete KYC to claim prizes (government ID needed)
 * Final prizes will be decided within 2 weeks of competition end OR 2 weeks after submission (in case this is a late submission) by the Harmony team
-
+* Stake Heist will go on for 2 weeks after launch. Submissions made during this period will be eligible for Stake Heist prizes. The event ends on May 1st at 23:59 UTC
+* Note that Harmony is an open source project
+* Exploits that are solely driven by external factors such as validator's personal negligence to security and using 3rd party applications of the node software will not be eligible for prizes
 
 **Join the conversation**
 
