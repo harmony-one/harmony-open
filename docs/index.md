@@ -1,10 +1,5 @@
 # Harmony Services and Owners
 
-Created By: Leo Chen
-Last Edit Time: Aug 20, 2020 10:20 PM
-Last Edited By: Leo Chen
-Status: In progress
-
 This page lists all the public facing services provided by Harmony.one and the corresponding eng/biz owners.
 
 # ownership
@@ -92,11 +87,11 @@ owner: @Janet Liang
 
 ### [https://docs.harmony.one/](https://docs.harmony.one/)
 
-owner: @yelllowsin ☯ | Stakehere.com 
+owner: @yelllowsin
 
 ### [https://nodes.harmony.one/](https://nodes.harmony.one/)
 
-owner: @yelllowsin ☯ | Stakehere.com 
+owner: @yelllowsin
 
 ### [https://wiki.harmony.one/](https://wiki.harmony.one/)
 
