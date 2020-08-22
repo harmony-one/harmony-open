@@ -29,7 +29,7 @@ owner: @xiaopeng li
 
 ### [https://explorer.testnet.harmony.one](https://explorer.testnet.harmony.one)
 
-owner: @Nita Neou - Soph 
+owner: @Soph 
 
 ## RPC endpoint
 
@@ -47,11 +47,11 @@ owner: @Janet Liang
 
 ### [https://api.s{0,1,2,3}.b.hmny.io](https://api.s{0,1,2,3}.b.hmny.io)
 
-owner: @Nita Neou - Soph 
+owner: @Soph 
 
 ### [https://ws.s{0,1,2,3}.b.hmny.io](https://ws.s{0,1,2,3}.b.hmny.io)
 
-owner: @Nita Neou - Soph 
+owner: @Soph 
 
 ## website and vanity URL
 
