@@ -99,9 +99,9 @@ shall we obsolete this one?
 
 ## bridge
 
-### ethhmy bridge; TBA
+### ethhmy bridge; [https://eth.bridge.harmony.one/busd](https://eth.bridge.harmony.one/busd)
 
-owner: @Ganesha Upadhyaya 
+owner: @Sahil Dewan
 
 ### [https://oracle.harmony.one/one-usdt](https://oracle.harmony.one/one-usdt)
 
